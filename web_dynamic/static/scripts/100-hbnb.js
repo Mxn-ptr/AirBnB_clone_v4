@@ -1,6 +1,26 @@
 const amenities = {};
+const states = {};
+const cities = {};
 $('document').ready(function () {
-  $('input[type="checkbox"]').change(function () {
+  $('.statecheck').change(function () {
+    if ($(this).is(':checked')) {
+      states[$(this).attr('data-id')] = $(this).attr('data-name');
+    } else {
+      delete states[$(this).attr('data-id')];
+    }
+    $('.locations h4').text(Object.values(states).join(', '));
+  });
+
+  $('.citycheck').change(function () {
+    if ($(this).is(':checked')) {
+      cities[$(this).attr('data-id')] = $(this).attr('data-name');
+    } else {
+      delete cities[$(this).attr('data-id')];
+    }
+    $('.locations h4').text(Object.values(cities).join(', '));
+  });
+
+  $('.amenities input[type="checkbox"]').change(function () {
     if ($(this).is(':checked')) {
       amenities[$(this).attr('data-id')] = $(this).attr('data-name');
     } else {
@@ -32,7 +52,7 @@ $('document').ready(function () {
   function CreatePlaces (place) {
     return `
   <article>
-<div class="title_box">
+  <div class="title_box">
   <h2>${place.name}</h2>
   <div class="price_by_night">$${place.price_by_night}
   </div>
@@ -58,7 +78,11 @@ $('document').ready(function () {
       url: 'http://0.0.0.0:5001/api/v1/places_search',
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({ amenities: Object.keys(amenities) }),
+      data: JSON.stringify({
+        amenities: Object.keys(amenities),
+        states: Object.keys(states),
+        cities: Object.keys(cities)
+      }),
       success: function (data) {
         for (let i = 0; i < data.length; i++) {
           $('section.places').append(CreatePlaces(data[i]));
