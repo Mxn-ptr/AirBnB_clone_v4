@@ -30,7 +30,6 @@ $('document').ready(function () {
   });
 
   function CreatePlaces (place) {
-    $('section.places').empty();
     return `
       <article>
 	  <div class="title_box">
@@ -54,6 +53,7 @@ $('document').ready(function () {
   }
 
   $('button').click(function () {
+    $('section.places').empty();
     $.ajax({
       url: 'http://0.0.0.0:5001/api/v1/places_search',
       type: 'POST',
